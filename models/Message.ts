@@ -1,6 +1,6 @@
-import mongoose, { Document, Schema } from 'mongoose'
+import mongoose, { Document, Schema, Model } from 'mongoose'
 
-export interface IMessage extends Document {
+export interface IMessage {
   name: string
   email: string
   subject: string
@@ -9,7 +9,9 @@ export interface IMessage extends Document {
   createdAt: Date
 }
 
-const MessageSchema = new Schema<IMessage>(
+type MessageDocument = IMessage & Document
+
+const MessageSchema = new Schema<MessageDocument>(
   {
     name: { type: String, required: true },
     email: { type: String, required: true },
@@ -20,5 +22,5 @@ const MessageSchema = new Schema<IMessage>(
   { timestamps: true }
 )
 
-export const Message =
-  mongoose.models.Message ?? mongoose.model<IMessage>('Message', MessageSchema)
+export const Message: Model<MessageDocument> =
+  mongoose.models.Message ?? mongoose.model<MessageDocument>('Message', MessageSchema)

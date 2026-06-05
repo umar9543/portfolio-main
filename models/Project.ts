@@ -1,6 +1,6 @@
-import mongoose, { Document, Schema } from 'mongoose'
+import mongoose, { Document, Schema, Model } from 'mongoose'
 
-export interface IProject extends Document {
+export interface IProject {
   title: string
   shortDesc: string
   fullDesc?: string
@@ -15,7 +15,9 @@ export interface IProject extends Document {
   createdAt: Date
 }
 
-const ProjectSchema = new Schema<IProject>(
+type ProjectDocument = IProject & Document
+
+const ProjectSchema = new Schema<ProjectDocument>(
   {
     title: { type: String, required: true },
     shortDesc: { type: String, required: true, maxlength: 120 },
@@ -36,5 +38,5 @@ const ProjectSchema = new Schema<IProject>(
   { timestamps: true }
 )
 
-export const Project =
-  mongoose.models.Project ?? mongoose.model<IProject>('Project', ProjectSchema)
+export const Project: Model<ProjectDocument> =
+  mongoose.models.Project ?? mongoose.model<ProjectDocument>('Project', ProjectSchema)
