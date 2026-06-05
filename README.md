@@ -1,36 +1,149 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Muhammad Umar — Full-Stack Developer Portfolio
 
-## Getting Started
+A production-ready full-stack developer portfolio built with **Next.js 14 App Router**, **Three.js**, **MongoDB**, **JWT auth**, **Cloudinary**, and **Resend** — deployable to Vercel in one click.
 
-First, run the development server:
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/umar9543/portfolio)
+
+---
+
+## ✨ Features
+
+- 🌌 **Three.js Hero** — 3000-particle galaxy + floating icosahedron (SSR-safe dynamic import)
+- 🎭 **7 Animated Sections** — Hero, About, Skills, Projects, Experience, Contact, Footer
+- ⚡ **Full Backend** — 12 API routes via Next.js App Router
+- 🔐 **JWT Admin Auth** — jose library (Edge Runtime compatible), httpOnly cookies
+- 📁 **MongoDB Atlas** — Mongoose with serverless singleton pattern
+- 🖼️ **Cloudinary** — Image uploads with automatic optimization
+- 📧 **Resend** — Email notifications on contact form submissions
+- 🎛️ **Admin Panel** — Projects CRUD, messages inbox, mark read/unread
+- 🌑 **Deep Space Theme** — Glassmorphism, grain texture, custom cursor
+
+---
+
+## 🚀 Quick Start
+
+### 1. Clone & Install
+
+```bash
+git clone https://github.com/umar9543/portfolio.git
+cd portfolio
+npm install
+```
+
+### 2. Environment Variables
+
+Copy `.env.local` and fill in your real values:
+
+```bash
+cp .env.local .env.local
+```
+
+| Variable | Where to get it |
+|---|---|
+| `MONGO_URI` | [MongoDB Atlas](https://cloud.mongodb.com) → Connect → Drivers |
+| `JWT_SECRET` | `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"` |
+| `CLOUDINARY_CLOUD_NAME` | [Cloudinary Console](https://console.cloudinary.com) → Dashboard |
+| `CLOUDINARY_API_KEY` | Same as above |
+| `CLOUDINARY_API_SECRET` | Same as above |
+| `NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME` | Same cloud name |
+| `NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET` | Create unsigned upload preset named `portfolio_unsigned` |
+| `RESEND_API_KEY` | [Resend](https://resend.com) → API Keys |
+| `CONTACT_EMAIL` | Your email (mumer9543@gmail.com) |
+| `SEED_SECRET` | Any secret string, e.g. `seed_abc123` |
+
+### 3. Run Development Server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🌱 Seed the Database (First Time Setup)
 
-## Learn More
+After setting up env vars and running the server:
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+curl -X POST http://localhost:3000/api/seed \
+  -H "x-seed-secret: YOUR_SEED_SECRET"
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+This creates:
+- Admin account: `admin@mumar.dev` / `Admin@1234`
+- 4 real projects from your CV
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+> ⚠️ **After seeding:** Change the admin password or remove/disable the `/api/seed` route.
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🔐 Admin Panel
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Visit `/admin/login` and sign in with the seeded credentials.
+
+| Page | URL | Description |
+|---|---|---|
+| Login | `/admin/login` | JWT auth |
+| Dashboard | `/admin/dashboard` | Stats + recent messages |
+| Projects | `/admin/projects` | Full CRUD with image upload |
+| Messages | `/admin/messages` | Inbox with mark read |
+
+---
+
+## 📦 Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Framework | Next.js 14 (App Router), TypeScript |
+| Styling | Tailwind CSS |
+| 3D / Motion | Three.js, @react-three/fiber, Framer Motion |
+| Forms | React Hook Form + Zod |
+| Database | MongoDB Atlas + Mongoose |
+| Auth | jose (JWT, Edge Runtime compatible) |
+| Images | Cloudinary |
+| Email | Resend |
+| Deployment | Vercel |
+
+---
+
+## 🌐 Vercel Deployment
+
+1. Push to GitHub
+2. Import repo in [Vercel](https://vercel.com)
+3. Add all environment variables in Vercel project settings
+4. **MongoDB Atlas**: Add `0.0.0.0/0` to IP whitelist (Vercel uses dynamic IPs)
+5. Deploy → call `/api/seed` once → done!
+
+---
+
+## 📂 Project Structure
+
+```
+/app
+  /(public)        → Portfolio pages (Hero, About, Skills, etc.)
+  /admin           → Admin panel (login, dashboard, projects, messages)
+  /api             → 12 API routes (auth, projects, contact, upload, seed)
+/components
+  /three           → HeroCanvas, FloatingCube (Three.js)
+  /sections        → 7 portfolio sections
+  /ui              → Navbar, ProjectCard, AdminSidebar, CustomCursor
+/lib               → db.ts, auth.ts, cloudinary.ts, validations.ts
+/models            → Project.ts, Message.ts, Admin.ts
+/middleware.ts     → Protects /admin/* routes
+/public
+  /resume.pdf      → Replace with your actual CV
+```
+
+---
+
+## 📝 Customization
+
+1. **Personal info**: Edit `components/sections/Hero.tsx`, `About.tsx`, `Contact.tsx`
+2. **Projects**: Use admin panel at `/admin/projects`
+3. **Resume**: Replace `public/resume.pdf` with your actual CV
+4. **Colors**: Customize `--color-cyan` and `--color-violet` in `app/globals.css`
+
+---
+
+Built with ❤️ by Muhammad Umar
