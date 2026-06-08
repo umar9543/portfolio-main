@@ -1,26 +1,185 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --color-space: #080B14;
+    --color-cyan: #00F5FF;
+    --color-violet: #7B2FFF;
+    --font-space: var(--font-space), 'Space Grotesk', sans-serif;
+    --font-dm-mono: var(--font-dm-mono), 'DM Mono', monospace;
+    --font-inter: var(--font-inter), 'Inter', sans-serif;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+  }
+
+  body {
+    background-color: var(--color-space);
+    color: #fff;
+    font-family: var(--font-inter);
+    overflow-x: hidden;
+    /* cursor is controlled by .custom-cursor-active class (added by CustomCursor component) */
+  }
+
+  /* Hide default cursor only when custom cursor is mounted (public portfolio pages) */
+  @media (pointer: fine) {
+    body.custom-cursor-active,
+    body.custom-cursor-active * {
+      cursor: none !important;
+    }
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--color-space); }
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(to bottom, var(--color-cyan), var(--color-violet));
+    border-radius: 2px;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  /* Glass card */
+  .glass-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    transition: all 0.3s ease;
+  }
+
+  .glass-card:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.12);
+  }
+
+  /* Glow effects */
+  .text-cyan-glow {
+    color: var(--color-cyan);
+    text-shadow: 0 0 30px rgba(0, 245, 255, 0.5);
+  }
+
+  .text-violet-glow {
+    color: var(--color-violet);
+    text-shadow: 0 0 30px rgba(123, 47, 255, 0.5);
+  }
+
+  /* Font utilities */
+  .font-space { font-family: var(--font-space); }
+  .font-dm-mono { font-family: var(--font-dm-mono); }
+  .font-inter { font-family: var(--font-inter); }
+
+  /* Color utilities */
+  .text-cyan { color: var(--color-cyan); }
+  .text-violet { color: var(--color-violet); }
+  .bg-space { background-color: var(--color-space); }
+  .bg-cyan { background-color: var(--color-cyan); }
+  .bg-violet { background-color: var(--color-violet); }
+  .border-cyan { border-color: var(--color-cyan); }
+  .border-violet { border-color: var(--color-violet); }
+  .text-space { color: var(--color-space); }
+
+  /* Grain overlay */
+  .grain-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    pointer-events: none;
+    opacity: 0.018;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 128px 128px;
+  }
+
+  /* Admin layout */
+  .admin-layout {
+    display: flex;
+    min-height: 100vh;
+    background-color: var(--color-space);
+  }
+}
+
+@layer utilities {
+  /* Animations */
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
+  @keyframes gradient {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+
+  @keyframes scroll-line {
+    0% { transform: scaleY(0); transform-origin: top; }
+    50% { transform: scaleY(1); transform-origin: top; }
+    51% { transform: scaleY(1); transform-origin: bottom; }
+    100% { transform: scaleY(0); transform-origin: bottom; }
+  }
+
+  @keyframes ping-slow {
+    0% { transform: scale(1); opacity: 0.4; }
+    70% { transform: scale(1.8); opacity: 0; }
+    100% { transform: scale(1.8); opacity: 0; }
+  }
+
+  .animate-marquee {
+    animation: marquee 35s linear infinite;
+  }
+
+  .animate-blink {
+    animation: blink 1s step-end infinite;
+  }
+
+  .animate-gradient {
+    background-size: 200% 200%;
+    animation: gradient 4s ease infinite;
+  }
+
+  .animate-scroll-line {
+    animation: scroll-line 2s ease-in-out infinite;
+  }
+
+  /* Cyan opacity utilities */
+  .bg-cyan\/3 { background-color: rgba(0, 245, 255, 0.03); }
+  .bg-cyan\/5 { background-color: rgba(0, 245, 255, 0.05); }
+  .bg-cyan\/8 { background-color: rgba(0, 245, 255, 0.08); }
+  .bg-cyan\/10 { background-color: rgba(0, 245, 255, 0.10); }
+  .bg-cyan\/20 { background-color: rgba(0, 245, 255, 0.20); }
+
+  .border-cyan\/20 { border-color: rgba(0, 245, 255, 0.20); }
+  .border-cyan\/30 { border-color: rgba(0, 245, 255, 0.30); }
+  .border-cyan\/40 { border-color: rgba(0, 245, 255, 0.40); }
+  .border-cyan\/50 { border-color: rgba(0, 245, 255, 0.50); }
+
+  .text-cyan\/80 { color: rgba(0, 245, 255, 0.80); }
+
+  /* Violet opacity utilities */
+  .bg-violet\/3 { background-color: rgba(123, 47, 255, 0.03); }
+  .bg-violet\/5 { background-color: rgba(123, 47, 255, 0.05); }
+  .bg-violet\/10 { background-color: rgba(123, 47, 255, 0.10); }
+  .bg-violet\/20 { background-color: rgba(123, 47, 255, 0.20); }
+
+  .border-violet\/20 { border-color: rgba(123, 47, 255, 0.20); }
+  .border-violet\/30 { border-color: rgba(123, 47, 255, 0.30); }
+
+  /* Space opacity */
+  .bg-space\/80 { background-color: rgba(8, 11, 20, 0.80); }
+  .bg-space\/40 { background-color: rgba(8, 11, 20, 0.40); }
+  .bg-space\/20 { background-color: rgba(8, 11, 20, 0.20); }
 }

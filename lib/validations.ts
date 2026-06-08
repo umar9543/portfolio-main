@@ -9,14 +9,14 @@ export const projectSchema = z.object({
   title: z.string().min(1, 'Title is required').max(100),
   shortDesc: z.string().min(1, 'Short description is required').max(120, 'Max 120 characters'),
   fullDesc: z.string().optional(),
-  techStack: z.array(z.string()).default([]),
+  techStack: z.array(z.string()),
   category: z.enum(['Frontend', 'Backend', 'Full-Stack']),
   githubUrl: z.string().url('Invalid URL').optional().or(z.literal('')),
   liveUrl: z.string().url('Invalid URL').optional().or(z.literal('')),
   thumbnail: z.string().optional(),
   cloudinaryId: z.string().optional(),
-  featured: z.boolean().default(false),
-  order: z.number().default(0),
+  featured: z.boolean(),
+  order: z.number(),
 })
 
 export const projectUpdateSchema = projectSchema.partial()
